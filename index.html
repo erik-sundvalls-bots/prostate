@@ -4,10 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Prostate MRI zone map</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/light.css"
-    />
     <style>
       :root {
         color-scheme: light;
@@ -15,7 +11,6 @@
         --muted: #57534e;
         --line: #d6d3d1;
         --paper: #f6f4f1;
-        --panel: #fff;
         --link: #1e3a5f;
       }
       * { box-sizing: border-box; }
@@ -28,69 +23,29 @@
         background: var(--paper);
       }
       main {
-        max-width: 880px;
+        max-width: 40rem;
         margin: 0 auto;
-        padding: 2rem 1.25rem 4rem;
+        padding: 2.5rem 1.25rem 4rem;
       }
-      header h1 {
-        margin: 0 0 0.35rem;
+      h1 {
+        margin: 0 0 0.75rem;
         font-size: 1.85rem;
         letter-spacing: -0.02em;
         line-height: 1.2;
       }
-      .kicker {
-        margin: 0 0 1rem;
-        color: var(--muted);
-        font-size: 0.95rem;
-      }
       a { color: var(--link); }
-      nav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem 1.25rem;
-        margin: 1.25rem 0 0.5rem;
-        padding-top: 0.75rem;
+      ul {
+        margin: 1.25rem 0 0;
+        padding: 0;
+        list-style: none;
         border-top: 1px solid var(--line);
       }
-      .panel {
-        margin-top: 1.25rem;
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        padding: 1rem 1rem 0.5rem;
+      li {
+        border-bottom: 1px solid var(--line);
       }
-      .controls {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem 1.5rem;
-        align-items: center;
-        font-size: 0.95rem;
-      }
-      .sample {
-        margin: 0.35rem 0 0.5rem;
-        color: var(--muted);
-        font-size: 0.95rem;
-      }
-      label { color: var(--muted); }
-      select { font: inherit; padding: 0.2rem 0.4rem; }
-      #status {
-        min-height: 1.4em;
-        margin: 0.25rem 0 0.75rem;
-        color: var(--muted);
-        font-size: 0.95rem;
-      }
-      prostate-mri-map {
-        --pirads-1: #ffffb2;
-        --pirads-2: #fd8d3c;
-        --pirads-3: #fb6a4a;
-        --pirads-4: #de2d26;
-        --pirads-5: #a50f15;
-      }
-      prostate-mri-map svg {
-        width: 100%;
-        height: auto;
-        max-width: 720px;
+      li a {
         display: block;
+        padding: 0.75rem 0;
       }
       footer {
         margin-top: 2rem;
@@ -101,107 +56,27 @@
   </head>
   <body>
     <main>
-      <header>
-        <p class="kicker">24-zone D3 web component · Apache License 2.0</p>
-        <h1>Prostate MRI zone map</h1>
-        <p>
-          This repository is a fork, in the
-          <a href="https://github.com/erik-sundvalls-bots/prostate">erik-sundvalls-bots</a>
-          account, of Erik Sundvall’s early AI-coding experiment
-          <a href="https://github.com/ErikSundvall/prostate">ErikSundvall/prostate</a>.
-          The widget below is the existing <code>prostate-mri-map</code> custom
-          element: a static bundle, a slotted SVG, and sample lesion data. It is
-          not a new component.
-        </p>
-      </header>
-
-      <nav>
-        <a href="report.html">Findings report (2026-11-12)</a>
-        <a href="demo/index.html">Full demo</a>
-        <a href="https://github.com/ErikSundvall/prostate">Upstream repository</a>
-        <a href="LICENSE">Apache License 2.0</a>
-      </nav>
-
-      <section class="panel" aria-label="Prostate map">
-        <div class="controls">
-          <label>
-            Language
-            <select id="lang">
-              <option value="en">English</option>
-              <option value="sv">Svenska</option>
-            </select>
-          </label>
-        </div>
-        <p class="sample">Sample: <code>demo/data/example-1.json</code> — lesion L1, PI-RADS 4, zones 1Av and 2Av.</p>
-        <p id="status">Loading the component…</p>
-        <prostate-mri-map id="map" language="en"></prostate-mri-map>
-      </section>
-
+      <h1>Prostate MRI zone map</h1>
+      <p>
+        This repository is a fork, in the
+        <a href="https://github.com/erik-sundvalls-bots/prostate">erik-sundvalls-bots</a>
+        account, of Erik Sundvall’s early AI-coding experiment
+        <a href="https://github.com/ErikSundvall/prostate">ErikSundvall/prostate</a>.
+        It is a 24-zone prostate web component built with D3, under the
+        Apache License 2.0.
+      </p>
+      <ul>
+        <li><a href="diagram.html">Zone map demo</a></li>
+        <li><a href="report.html">Findings report (2026-11-12)</a></li>
+        <li><a href="https://github.com/ErikSundvall/prostate">Upstream repository</a></li>
+        <li><a href="LICENSE">Apache License 2.0</a></li>
+      </ul>
       <footer>
-        <p>
-          The map is <code>demo/prostate-map.svg</code> (24 zones:
-          glands 1–4, sectors A–C, depths v and d). Click or tab to a zone.
-          The full demo adds dataset and map selectors. A static file host is
-          enough: the page fetches the bundle, the SVG, and the JSON. There is
-          no application server.
-        </p>
         <p>
           <code>readme.md</code> still says “MIT License”. The license file in
           this repository is the Apache License 2.0.
         </p>
       </footer>
     </main>
-
-    <script type="module">
-      const status = document.getElementById("status");
-      const map = document.getElementById("map");
-
-      try {
-        await import("./demo/prostate-mri-map.bundle.js");
-      } catch (err) {
-        status.textContent =
-          "The component bundle did not load. Serve this folder over HTTP (GitHub Pages, or a static file server). Opening the file directly can block module and SVG fetches.";
-        console.error(err);
-        throw err;
-      }
-
-      const svgResp = await fetch("./demo/prostate-map.svg");
-      if (!svgResp.ok) {
-        status.textContent = "Could not fetch demo/prostate-map.svg.";
-        throw new Error(status.textContent);
-      }
-      const slot = document.createElement("div");
-      slot.setAttribute("slot", "map-svg");
-      slot.innerHTML = await svgResp.text();
-      map.appendChild(slot);
-
-      const dataResp = await fetch("./demo/data/example-1.json");
-      if (!dataResp.ok) {
-        status.textContent = "Could not fetch demo/data/example-1.json.";
-        throw new Error(status.textContent);
-      }
-      map.data = await dataResp.json();
-      status.textContent = "Click a zone. Zones 1Av and 2Av carry lesion L1 (PI-RADS 4).";
-
-      document.getElementById("lang").addEventListener("change", (event) => {
-        map.language = event.target.value;
-      });
-
-      map.addEventListener("zone-click", (event) => {
-        const zoneId = event.detail?.zoneId || "";
-        const lesions = event.detail?.lesions || [];
-        if (!lesions.length) {
-          status.textContent = `Zone ${zoneId}: no lesions in this sample.`;
-          return;
-        }
-        const bits = lesions.map((lesion) => `${lesion.id} (PI-RADS ${lesion.pirads})`);
-        status.textContent = `Zone ${zoneId}: ${bits.join(", ")}.`;
-      });
-
-      map.addEventListener("data-warning", (event) => {
-        const warnings = event.detail?.warnings || [];
-        if (warnings.length) status.textContent = warnings.join("; ");
-      });
-    </script>
   </body>
 </html>

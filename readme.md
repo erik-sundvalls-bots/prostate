@@ -4,11 +4,12 @@ A Web Component for visualizing prostate MRI zones with lesion data, built with 
 
 ## Site
 
-`index.html` is a static front page that loads this component.
+`index.html` is a static front page with links.
+The working component is on `diagram.html` (the original controls remain in `demo/index.html`).
 `report.html` summarises a 2026-11-12 look at prostatecancer.ai and other
-open-source prostate schematics. `.github/workflows/pages.yml` deploys both
-to GitHub Pages from `main`. The original Tesseract-MI zone SVGs used in the
-report are in `assets/tesseract-svgs/`.
+open-source prostate schematics. `.github/workflows/pages.yml` deploys the
+site to GitHub Pages from `main`. The original Tesseract-MI zone SVGs used in
+the report are in `assets/tesseract-svgs/`.
 
 ## Overview
 

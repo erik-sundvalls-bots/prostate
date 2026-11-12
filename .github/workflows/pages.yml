@@ -1,4 +1,4 @@
-# Deploy the static site (index.html, report.html, the demo, and assets)
+# Deploy the static site (index.html, diagram.html, report.html, the demo, and assets)
 # to GitHub Pages. The prostate component bundle is already committed at
 # demo/prostate-mri-map.bundle.js, so this workflow does not need a Deno build.
 #
@@ -34,7 +34,7 @@ jobs:
       - name: Assemble the site
         run: |
           mkdir -p _site/demo/data _site/assets
-          cp index.html report.html LICENSE _site/
+          cp index.html diagram.html report.html LICENSE _site/
           cp -a assets/. _site/assets/
           cp demo/index.html demo/prostate-map.svg demo/prostate-map-2.svg \
             demo/prostate-mri-map.bundle.js _site/demo/
