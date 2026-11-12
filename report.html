@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Prostate zone maps — findings, 2026-11-12</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #1c1917;
+        --muted: #57534e;
+        --line: #e7e5e4;
+        --paper: #fafaf9;
+        --panel: #fff;
+        --link: #1e3a5f;
+        --code: #f5f5f4;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+        font-size: 18px;
+        line-height: 1.55;
+        color: var(--ink);
+        background: var(--paper);
+      }
+      main { max-width: 980px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+      h1 { font-size: 2rem; line-height: 1.2; letter-spacing: -0.02em; margin: 0 0 0.4rem; }
+      h2 { font-size: 1.45rem; margin: 2.2rem 0 0.6rem; line-height: 1.25; }
+      h3 { font-size: 1.15rem; margin: 1.6rem 0 0.4rem; }
+      a { color: var(--link); }
+      p, li { hanging-punctuation: first; }
+      .meta { color: var(--muted); margin-top: 0; }
+      nav.toc { margin: 1.25rem 0 0.5rem; }
+      nav.toc a { margin-right: 1rem; }
+      code, .path {
+        font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+        font-size: 0.86em;
+        background: var(--code);
+        padding: 0.05em 0.3em;
+        border-radius: 4px;
+        overflow-wrap: anywhere;
+      }
+      .note {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--link);
+        padding: 0.8rem 1rem;
+        margin: 1rem 0;
+      }
+      .figures {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.9rem;
+        margin: 1rem 0 0.5rem;
+      }
+      figure {
+        margin: 0;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 0.55rem 0.55rem 0.7rem;
+      }
+      figure.wide { grid-column: 1 / -1; }
+      figure img { width: 100%; height: auto; display: block; background: #fff; }
+      figcaption { margin-top: 0.45rem; font-size: 0.92rem; line-height: 1.4; color: #44403c; }
+      .table-wrap { overflow-x: auto; margin: 1rem 0; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+      table { border-collapse: collapse; width: 100%; font-family: "Segoe UI", system-ui, sans-serif; font-size: 0.82rem; line-height: 1.35; }
+      th, td { text-align: left; vertical-align: top; padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--line); }
+      th { background: #f5f5f4; position: sticky; top: 0; }
+      tr:last-child td { border-bottom: 0; }
+      footer { margin-top: 2.5rem; color: var(--muted); font-size: 0.95rem; }
+      @media (max-width: 720px) {
+        body { font-size: 16.5px; }
+        .figures { grid-template-columns: 1fr; }
+        figure.wide { grid-column: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p><a href="index.html">Front page</a></p>
+      <h1>Prostate zone maps: findings</h1>
+      <p class="meta">12 November 2026 (Europe/Stockholm). This page summarises two sets of notes from that date: an investigation of Tesseract-MI/prostatecancer.ai, and a survey of other open-source prostate schematics. It does not add results beyond those notes, except the file check recorded with the saved SVGs.</p>
+
+      <nav class="toc">
+        <a href="#tesseract">prostatecancer.ai</a>
+        <a href="#slices">The four slices</a>
+        <a href="#license">Source and license</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#static">Why it is not a static site</a>
+        <a href="#survey">Other projects</a>
+        <a href="#open">Not established</a>
+      </nav>
+
+      <h2 id="tesseract">The zone map was 2D</h2>
+      <p>In <a href="https://github.com/Tesseract-MI/prostatecancer.ai">Tesseract-MI/prostatecancer.ai</a>, master <code>3e5d699</code> (2019-10-07), the zone map is four static, hand-drawn Inkscape SVG slice diagrams, one per level. There is no 3D. A level dropdown swaps which SVG is embedded. Clicking a sector fills two text boxes with the side and the sector. The notes do not describe sector highlighting.</p>
+      <p>The level control is <code>packages/tesseract-cancer-study/client/components/prostate/rowOption/rowOption.html</code>:</p>
+      <ul>
+        <li>Lines 9–14: a <code>&lt;select class="location"&gt;</code> with options Apex, Mid, Base, and Seminal Vesicles.</li>
+        <li>Lines 15–16: two “-” addon boxes, the selected side and the selected sector.</li>
+        <li>Lines 22–29: inline <code>notify(e)</code> splits the clicked element id on <code>_</code> into side and sector, and writes those boxes.</li>
+        <li>Line 31: the default embed is <code>&lt;embed src="/images/apex.svg" type="image/svg+xml"&gt;</code>.</li>
+      </ul>
+      <p><code>rowOption.js</code> line 4 maps the labels to files: <code>{Base:'base', Mid:'mid', Apex:'apex', 'Seminal Vesicles':'seminal_vesicles'}</code>. Lines 16–22, on a dropdown change, replace the embed with <code>/images/&lt;level&gt;.svg</code> and reset side and sector to “-”.</p>
+      <p>The drawings are <code>public/images/apex.svg</code>, <code>mid.svg</code>, <code>base.svg</code>, and <code>seminal_vesicles.svg</code>. Each header contains <code>&lt;!-- Created with Inkscape --&gt;</code>. Clickable paths use ids such as <code>R_PZpl</code>, <code>L_TZa</code>, and <code>R_AS</code>. <code>R_CZ</code> is on the base slice only. An example handler is <code>onclick="top.notify(evt)"</code> at apex.svg lines 367–370. Text labels on the apex drawing (lines 72–360) include R/L, AS, TZa, TZp, PZa, PZpl, PZpm, and “Apex”. <code>public/images/locations.png</code> is the PI-RADS v2 sector-map figure the SVGs were traced from.</p>
+      <p>Nothing in the repository, <code>package.json</code>, or <code>.meteor/packages</code> uses three.js, WebGL, or vtk.js. Grep hits for “three” are only <code>threeColumns</code> and the DICOM value multiplicity <code>VM_THREE</code>. The OHIF showcase image <a href="https://ohif.org/static/2f33b4ad0b28e00a9c831f43dd4fba84/168af/prostatecancer-ai-04.webp">prostatecancer-ai-04</a> and the screenshots named findings-panel-1/2.png show the apex.svg drawing. A Google AI Mode share link (<a href="https://share.google/aimode/eVzzEKgbC44j5KTSx">share.google/aimode/eVzzEKgbC44j5KTSx</a>) could not be read; it returned a Google interstitial only.</p>
+      <p>The same team later ported the selector to React: <a href="https://github.com/Tesseract-MI/prostate-map">Tesseract-MI/prostate-map</a> (2019-08). <code>src/prostate-map/Apex.js</code>, <code>Mid.js</code>, and <code>Base.js</code> are the same SVGs as JSX (<code>&lt;svg viewBox="0 0 131.566 122.129"&gt;</code>, <code>&lt;tspan zone=… direction=… onClick={onZoneChange}&gt;</code>), with <code>LocationSelector.js</code> and <code>NumberSelector.js</code>. That port is also 2D.</p>
+
+      <h3 id="slices">The four slices</h3>
+      <p>The figures are PNG renders of the original SVGs, saved in this repository under <a href="assets/tesseract-svgs/">assets/tesseract-svgs/</a>. They were fetched from the <code>master</code> branch. Their git blobs match commit <code>3e5d699f3972d1ceb5fa7b5010705643eae547ea</code>, which is that <code>master</code> commit (the notes cite it as <code>3e5d699</code>). They are PI-RADS v2 drawings: there are no base PZpm sectors.</p>
+      <div class="figures">
+        <figure>
+          <img src="assets/tesseract-svgs/png/apex.png" width="854" height="793" alt="Apex slice from prostatecancer.ai: pink peripheral zone, yellow transition zone, blue anterior stroma, labels R and L." />
+          <figcaption>Apex. Render of <a href="assets/tesseract-svgs/apex.svg">apex.svg</a>. Upstream: <a href="https://github.com/Tesseract-MI/prostatecancer.ai/blob/3e5d699f3972d1ceb5fa7b5010705643eae547ea/public/images/apex.svg">public/images/apex.svg</a> at <code>3e5d699</code>.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/tesseract-svgs/png/mid.png" width="868" height="774" alt="Mid gland slice from prostatecancer.ai, same colour scheme, labeled Mid." />
+          <figcaption>Mid. Render of <a href="assets/tesseract-svgs/mid.svg">mid.svg</a>. Upstream: <a href="https://github.com/Tesseract-MI/prostatecancer.ai/blob/3e5d699f3972d1ceb5fa7b5010705643eae547ea/public/images/mid.svg">public/images/mid.svg</a>.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/tesseract-svgs/png/base.png" width="867" height="650" alt="Base slice from prostatecancer.ai, with a green central zone and no PZpm label." />
+          <figcaption>Base, including the central zone (CZ) and no base PZpm. Render of <a href="assets/tesseract-svgs/base.svg">base.svg</a>. Upstream: <a href="https://github.com/Tesseract-MI/prostatecancer.ai/blob/3e5d699f3972d1ceb5fa7b5010705643eae547ea/public/images/base.svg">public/images/base.svg</a>.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/tesseract-svgs/png/seminal_vesicles.png" width="876" height="396" alt="Seminal vesicle outlines from prostatecancer.ai, labeled R and L." />
+          <figcaption>Seminal vesicles. Render of <a href="assets/tesseract-svgs/seminal_vesicles.svg">seminal_vesicles.svg</a>. Upstream: <a href="https://github.com/Tesseract-MI/prostatecancer.ai/blob/3e5d699f3972d1ceb5fa7b5010705643eae547ea/public/images/seminal_vesicles.svg">public/images/seminal_vesicles.svg</a>.</figcaption>
+        </figure>
+      </div>
+
+      <h2 id="license">Source, people, license</h2>
+      <ul>
+        <li>Main app: <a href="https://github.com/Tesseract-MI/prostatecancer.ai">Tesseract-MI/prostatecancer.ai</a>. MIT, “Copyright (c) 2018 ProstateWebViewer”. 135 commits. Last master commit 2019-10-07. Later activity is only dependabot branches. The MIT text is copied in <a href="assets/tesseract-svgs/README.md">assets/tesseract-svgs/README.md</a>.</li>
+        <li>Platform: <a href="https://github.com/Tesseract-MI/Tesseract-MI">Tesseract-MI/Tesseract-MI</a>. MIT. A generic version, without the study or the model.</li>
+        <li>React zone selector: <a href="https://github.com/Tesseract-MI/prostate-map">Tesseract-MI/prostate-map</a>. No LICENSE file. <code>package.json</code> says <code>"license": "(ISC OR GPL-3.0)"</code>, which is ambiguous. Treat it as unlicensed until clarified, or re-derive the artwork from the MIT SVGs in the main repository, which are the same drawings.</li>
+        <li><a href="https://github.com/Tesseract-MI/Viewers">Tesseract-MI/Viewers</a> is a fork of OHIF Viewers from the React v1 / v2 era. It has 6 commits of its own (2019-08-19 and 2019-08-20: a logo and an “ai probe tool”). The notes call it an abandoned start of a port.</li>
+        <li>Paper: Sedghi, Hamidi, Mehrtash, Ziegler, Tempany, Pieper, Kapur, Mousavi, “Tesseract-medical imaging: open-source browser-based platform for AI deployment in medical imaging”, Proc. SPIE 10951 (2019), <a href="https://doi.org/10.1117/12.2513004">doi:10.1117/12.2513004</a>. Queen’s University Med-i Lab. Showcase: <a href="https://ohif.org/showcase/ProstateCancer">ohif.org/showcase/ProstateCancer</a>.</li>
+        <li>Data: <code>private/findings.csv</code> is a ProstateX (TCIA) lesion list (ProxID, fid, pos, zone, ClinSig). The demo study in the screenshots is ProstateX-0004. ProstateX license terms were not verified.</li>
+      </ul>
+      <div class="note">
+        <p>The SVGs were traced from the ACR PI-RADS v2 sector-map figure. ACR licenses PI-RADS under CC BY-NC-ND 4.0, as quoted at <a href="https://radiopaedia.org/cases/prostate-sector-map-pi-rads-v21">radiopaedia.org/cases/prostate-sector-map-pi-rads-v21</a>, so reuse of the derived artwork may carry that restriction. The upstream MIT grant is a separate fact. See <a href="assets/tesseract-svgs/README.md">the SVG folder note</a>.</p>
+      </div>
+
+      <h2 id="architecture">Architecture</h2>
+      <p>The application is OHIF v1 on Meteor 1.6. <code>.meteor/release</code> is <code>METEOR@1.6</code>. <code>.meteor/packages</code> lists <code>ohif:*</code> Meteor packages plus <code>tesseract:report</code>, <code>ai</code>, <code>fiducial</code>, <code>server-probe</code>, <code>sync-scroll</code>, <code>sync-tools</code>, and <code>cancer-study</code>, with Blaze templates.</p>
+      <p>The study list and metadata go through Meteor server methods: <code>packages/ohif-studies/imports/server/methods/studylistSearch.js</code> line 10 and <code>getStudyMetadata.js</code> line 9. Those methods proxy DICOMweb from Orthanc (<code>config/orthancDICOMWeb.json</code>). <code>docker-compose.yml</code> runs MongoDB, Meteor, and orthanc-plugins 1.3.2.</p>
+      <p><code>server/main.js</code> uses MongoDB collections. Fiducials are seeded from <code>findings.csv</code>, and there is a UserData collection. Login uses <code>clinical:active-entry</code> at <code>/entrySignIn</code>.</p>
+      <p>The AI service is Flask with Keras 2.0.3 and TensorFlow 1.12: <code>models/pcad.py</code>, route <code>/predict</code> at line 59. DenseNet weights sit in <code>models/Densenet_T2_ABK_*</code> (12 MB and 1.9 MB files are present in the repository). The client calls a hard-coded <code>http://206.189.232.24:5000/predict</code> (<code>packages/ohif-core/client/components/bootstrap/dialog/ai.js</code> line 16). <code>pcad.py</code> line 30 pulls DICOM from a hard-coded Orthanc at <code>http://162.243.174.237:8042/</code>.</p>
+
+      <h2 id="static">Why it cannot be served as a static site</h2>
+      <p>The running app needs the Meteor server (study list, metadata, login, collections), Orthanc for DICOM, MongoDB, and the Flask process. A bundle of HTML and JavaScript does not replace those.</p>
+      <p>The Wayback Machine CDX for <code>prostatecancer.ai/*</code> (<a href="https://web.archive.org/cdx/search/cdx?url=prostatecancer.ai/*&amp;output=json&amp;collapse=urlkey">web.archive.org CDX</a>) listed 94 URLs, saved by the notes as cdx.json. Saved copies:</p>
+      <ul>
+        <li><a href="https://web.archive.org/web/20181107225954/http://prostatecancer.ai/">wayback/landing-20181107.html</a> — the Meteor shell.</li>
+        <li><a href="https://web.archive.org/web/20200529163859/http://prostatecancer.ai/af364ae40f86baf5e51b24e798d30f2e978b47cc.js?meteor_js_resource=true">wayback/bundle-af364ae.js</a> — a 2.8 MB Meteor client bundle. It contains <code>images/apex.svg</code>, the <code>:5000/predict</code> URL, <code>StudyListSearch</code>, <code>GetStudyMetadata</code>, <code>loginWithPassword</code>, and DDP.</li>
+      </ul>
+      <p>The zone SVGs themselves were not archived (only logo.png, fonts, and CSS). Captures from 2025 are error pages. The archived bundle cannot run statically: it needs a Meteor DDP/sockjs server for login, the study list, metadata, and collections. The notes call it pointless to serve. The GitHub source is the complete copy.</p>
+
+      <h2 id="survey">Other open-source prostate schematics</h2>
+      <p>Searched on 2026-11-12 (Europe/Stockholm) via GitHub repository search (the <code>gh</code> client, signed in as erik-sundvalls-bots, read-only; GitHub’s legacy code search returned only junk for sector names), the npm registry, GitLab.com, gitlab.inria.fr, the Slicer ExtensionsIndex, and the web and papers. Every repository in the table was cloned and checked.</p>
+      <p>Scheme check used in the notes: PI-RADS v2.1 has 41 sectors (38 prostate + 2 seminal vesicle + 1 urethra) and adds base PZpm right and left. v2 has 39 sectors and no base PZpm. The ACR revisions PDF cited is <a href="https://edge.sitecorecloud.io/americancoldf5f-acrorgf92a-productioncb02-3650/media/ACR/Files/RADS/PI-RADS/PIRADS-Revisions.pdf">PIRADS-Revisions.pdf</a>. “No license” means no LICENSE file and no GitHub license, so all rights reserved by default.</p>
+      <div class="note">
+        <p>Most of these projects are unlicensed. The ACR sector-map figure, where a project embeds it, is under CC BY-NC-ND 4.0, so derivatives of that figure are not freely reusable. The ranked table is the survey result. Four illustrations follow it; sources and licenses are also listed in <a href="assets/survey-shots/README.md">assets/survey-shots/README.md</a>. Those images are not covered by this repository’s Apache License 2.0.</p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <caption>Open-source prostate schematic and sector-map projects, in the survey’s rank order.</caption>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Project</th>
+              <th scope="col">2D / 3D</th>
+              <th scope="col">Scheme</th>
+              <th scope="col">Interactivity</th>
+              <th scope="col">License</th>
+              <th scope="col">Last commit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><a href="https://github.com/adambisa/rakathon-2026">adambisa/rakathon-2026</a> (ProstaPaper, Rakathon 2026 Brno)</td>
+              <td>2D React SVG, paths traced from the PI-RADS figure</td>
+              <td>v2.1: 38 prostate + sv L/R (+ urethra)</td>
+              <td>Hover, click to select a sector, lesions filled</td>
+              <td>none</td>
+              <td>2026-10-21</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><a href="https://github.com/hwangsi/PIRADSreport">hwangsi/PIRADSreport</a></td>
+              <td>2D SVG generated in JS (ellipse-clipped grid), base/mid/apex panels. Single HTML file</td>
+              <td>v2.1, 38 prostate (spec section 4)</td>
+              <td>Click toggles sectors per lesion and writes a text report</td>
+              <td>MIT</td>
+              <td>2026-07-12</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><a href="https://github.com/alterreal/prospect-annotator">alterreal/prospect-annotator</a></td>
+              <td>2D: per-level PNG (ACR v2.1 artwork) plus percent-rect hotspots</td>
+              <td>v2.1: 38 ids, including base PZpm</td>
+              <td>Tabs for base/mid/apex, click to select</td>
+              <td>none</td>
+              <td>2025-12-19</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><a href="https://github.com/SlicerProstate/SlicerPIRADS">SlicerProstate/SlicerPIRADS</a> (3D Slicer)</td>
+              <td>2D Qt dialog: PNG plus 39 checkable buttons. Map screenshot embedded in the HTML report</td>
+              <td>v2, 39 sectors (no base PZpm; SV L/R, urethra)</td>
+              <td>Multi-select per finding</td>
+              <td>BSD-3-Clause</td>
+              <td>2020-05-12 (not in the Slicer ExtensionsIndex)</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><a href="https://github.com/che85/PIRADS_Image_Map">che85/PIRADS_Image_Map</a></td>
+              <td>2D HTML image map over the sector PNG, jQuery ImageMapster</td>
+              <td>42 areas: 38 including base PZpm, SV L/R, 2 urethra</td>
+              <td>Hover and click</td>
+              <td>none</td>
+              <td>2017-01-10</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><a href="https://github.com/phasic/pirads">phasic/pirads</a> (Angular 2, mentions an Agfa wiki)</td>
+              <td>2D image map over a sectormap PNG</td>
+              <td>v2, 39 (no base PZpm)</td>
+              <td>Left-click adds a finding, right-click adds an extra</td>
+              <td>none</td>
+              <td>2016-11-28</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td><a href="https://github.com/Tubo/prostate-mri">Tubo/prostate-mri</a></td>
+              <td>2D React image-map polygons over a schematic PNG</td>
+              <td>v2-style: 35 named polygons, no base PZpm</td>
+              <td>Click</td>
+              <td>none</td>
+              <td>2018-11-05</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td><a href="https://github.com/juicedtin/PIRADSmap">juicedtin/PIRADSmap</a></td>
+              <td>Unity (C#) UI on 2D level PNGs</td>
+              <td>v2.1 artwork</td>
+              <td>Interactive PI-RADS calculator</td>
+              <td>none</td>
+              <td>2021-10-14</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td><a href="https://github.com/Dederanos/PIRADS_reporting">Dederanos/PIRADS_reporting</a> (<a href="https://dederanos.github.io/PIRADS_reporting/">live</a>)</td>
+              <td>2D canvas, freehand pen and eraser on a diagram PNG</td>
+              <td>v2.1 report (German)</td>
+              <td>Draw lesions; paste images</td>
+              <td>none</td>
+              <td>2025-08-27</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td><a href="https://github.com/teedr/prostate-visualization">teedr/prostate-visualization</a> (<a href="https://prostate-visualization.vercel.app/">live</a>)</td>
+              <td>2D grid and 3D three.js (sphere plus base/apex planes and markers)</td>
+              <td>Biopsy 12-core (lateral/medial × base/mid/apex), not PI-RADS</td>
+              <td>Parses pathology-report text; rotatable 3D</td>
+              <td>none</td>
+              <td>2026-08-21</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td><a href="https://github.com/schur037/prostate-biopsy-mapper">schur037/prostate-biopsy-mapper</a> (<a href="https://prostate-biopsy-mapper.vercel.app/">live</a>)</td>
+              <td>2D React SVG</td>
+              <td>12-zone systematic biopsy, draggable PI-RADS lesion markers, focal-therapy overlays</td>
+              <td>Click and drag</td>
+              <td>none</td>
+              <td>2026-03-17</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td><a href="https://github.com/nicoleaucoin/PI-RADS">nicoleaucoin/PI-RADS</a> (Slicer Project Week 2017)</td>
+              <td>No drawing: Qt combo boxes for gland, zone, AP, and LR</td>
+              <td>—</td>
+              <td>Dropdowns</td>
+              <td>none</td>
+              <td>2017-07-21</td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td><a href="https://gitlab.inria.fr/fboccara/data-driven-prostate-sectorization">fboccara/data-driven-prostate-sectorization</a> (MICCAI 2026, <a href="https://papers.miccai.org/miccai-2026/paper/3653_paper.pdf">paper</a>)</td>
+              <td>3D voxel sector maps computed from zonal masks (Python). No schematic UI</td>
+              <td>24-sector subset of v1’s 27</td>
+              <td>—</td>
+              <td>none</td>
+              <td>2026-08-26</td>
+            </tr>
+            <tr>
+              <td>14</td>
+              <td><a href="https://github.com/ErikSundvall/prostate">ErikSundvall/prostate</a> (this component’s upstream)</td>
+              <td>2D D3 web component, SVG</td>
+              <td>24 zones</td>
+              <td>Click, English and Swedish</td>
+              <td>Apache-2.0 LICENSE file</td>
+              <td>2025-11-03</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>A few of the drawings and interfaces</h3>
+      <div class="figures">
+        <figure>
+          <img src="assets/survey-shots/adambisa_rakathon_sector-map.jpg" width="1552" height="1878" alt="Grayscale prostate sector figure with sagittal and coronal views and axial slices labeled seminal vesicles, base, mid, apex, and urethra." />
+          <figcaption>Sector-map image in <a href="https://github.com/adambisa/rakathon-2026">adambisa/rakathon-2026</a>, file <code>packages/extraction/templates/sector-map.jpg</code>. Rank 1 in the survey: 2D, v2.1, no license (all rights reserved). The project’s own drawing is a React SVG traced from the PI-RADS figure. ACR’s CC BY-NC-ND 4.0 terms may restrict reuse of that figure.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/survey-shots/SlicerPIRADS_prostate_sector_map.png" width="1296" height="1771" alt="Colored prostate sector figure with a legend for PZ, CZ, TZ, US, and AFS, plus axial base, mid, and apex slices." />
+          <figcaption>Sector-map PNG shipped by <a href="https://github.com/SlicerProstate/SlicerPIRADS">SlicerProstate/SlicerPIRADS</a> at <code>SlicerPIRADS/Resources/Images/prostate_sector_map.png</code>. Rank 4: 2D Qt dialog, v2 with 39 sectors and no base PZpm, BSD-3-Clause, last commit 2020-05-12. Same ACR-figure caveat.</figcaption>
+        </figure>
+        <figure class="wide">
+          <img src="assets/survey-shots/teedr_prostate-visualization.png" width="1360" height="1100" alt="Prostate Biopsy Map web page with a 12-cell base, mid, and apex grid and a parsed sample report." />
+          <figcaption>Live page of <a href="https://github.com/teedr/prostate-visualization">teedr/prostate-visualization</a> (<a href="https://prostate-visualization.vercel.app/">prostate-visualization.vercel.app</a>), captured 2026-11-12. Rank 10: a 2D grid plus a 3D three.js view, 12-core biopsy rather than PI-RADS, no license. The survey’s evidence filename is <code>shots/teedr_prostate-visualization.png</code>.</figcaption>
+        </figure>
+        <figure class="wide">
+          <img src="assets/survey-shots/hwangsi_PIRADSreport.png" width="1100" height="2050" alt="Dark PI-RADS v2.1 report form with clinical information, measurements, an empty lesion list, and other-findings toggles." />
+          <figcaption>Form in <a href="https://github.com/hwangsi/PIRADSreport">hwangsi/PIRADSreport</a>, file <code>prostate_pirads_tool.html</code>, opened with no lesion added (captured 2026-11-12). Rank 2: 2D, v2.1, MIT, last commit 2026-07-12. The survey says the map appears after a lesion is added, and that the evidence shot is the form.</figcaption>
+        </figure>
+      </div>
+
+      <h3>Also noted, not ranked in the table</h3>
+      <p>Already covered above, and listed only briefly in the survey: Tesseract-MI/prostatecancer.ai, Tesseract-MI/prostate-map, and their predecessor <a href="https://github.com/ProstateWebViewer/PI-RADS-Trainer">ProstateWebViewer/PI-RADS-Trainer</a> (MIT, 2018). PI-RADS-Trainer uses the same Inkscape SVGs (v2, no base PZpm). NA-MIC project page: <a href="https://projectweek.na-mic.org/PW27_2018_Boston/Projects/ProstateMpMRIWebViewer/">PW27 ProstateMpMRIWebViewer</a>.</p>
+      <p>Searches with no relevant hits: npm (nothing for pirads, prostate map, or prostate sector); GitLab.com (only datasets and segmentation repositories); OHIF or Cornerstone PI-RADS extensions (only Tesseract); RSNA RadReport, which no longer publishes templates (<a href="https://radreport.org/">radreport.org</a>); the ACR PI-RADS v2.1 report template, which is text only, with the sector map living in the PI-RADS PDF.</p>
+      <p>Not open source, or source not found: mdprostate, a commercial schematic (<a href="https://mediaire.ai/en/mdprostate/">mediaire.ai/en/mdprostate</a>); ProstateView, a 3D teaching site (<a href="https://prostateview.com/v2/">prostateview.com/v2</a>), no source repository found; “Web-based Prostate Visualization Tool”, 27 segments, 2D and 3D (<a href="https://doi.org/10.1515/cdbme-2020-3144">doi:10.1515/cdbme-2020-3144</a>). That DOI returned 403, so the notes could not check whether the code was released.</p>
+      <p>Empty or near-empty repositories, not ranked: nashil2406/prostate-sector-map (0 commits), RajeshV81/YalePIRADS (0 commits), birkenfeldo/PIRADSCALC (README only; hosted at piradscalc.vercel.app), dthankins/pirads, ramirofnsc/PIRADS, fahym20/ProstateX-Sector-Annotation (a CSV of sector labels for ProstateX), and jinrehacek/Rakathon26 (a Python recognizer for hand-marked paper sector sheets, not a viewer).</p>
+
+      <h2 id="open">Not established</h2>
+      <ul>
+        <li>The prostate-map license, as above.</li>
+        <li>ProstateX redistribution terms.</li>
+        <li>Whether the AI models are worth reviving (TensorFlow 1 and Keras 2.0).</li>
+        <li>Whether the live site ran exactly master <code>3e5d699</code>. Bundle strings match, but the notes say this was not byte-verified.</li>
+      </ul>
+
+      <footer>
+        <p>Notes dated 2026-11-12. SVG sources, the MIT text, and the PI-RADS v2 / ACR note: <a href="assets/tesseract-svgs/README.md">assets/tesseract-svgs/README.md</a>. Other projects’ images: <a href="assets/survey-shots/README.md">assets/survey-shots/README.md</a>.</p>
+      </footer>
+    </main>
+  </body>
+</html>

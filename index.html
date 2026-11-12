@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Prostate MRI zone map</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #1c1917;
+        --muted: #57534e;
+        --line: #d6d3d1;
+        --paper: #f6f4f1;
+        --link: #1e3a5f;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        font-size: 17px;
+        line-height: 1.5;
+        color: var(--ink);
+        background: var(--paper);
+      }
+      main {
+        max-width: 40rem;
+        margin: 0 auto;
+        padding: 2.5rem 1.25rem 4rem;
+      }
+      h1 {
+        margin: 0 0 0.75rem;
+        font-size: 1.85rem;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+      a { color: var(--link); }
+      ul {
+        margin: 1.25rem 0 0;
+        padding: 0;
+        list-style: none;
+        border-top: 1px solid var(--line);
+      }
+      li {
+        border-bottom: 1px solid var(--line);
+      }
+      li a {
+        display: block;
+        padding: 0.75rem 0;
+      }
+      footer {
+        margin-top: 2rem;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Prostate MRI zone map</h1>
+      <p>
+        This repository is a fork, in the
+        <a href="https://github.com/erik-sundvalls-bots/prostate">erik-sundvalls-bots</a>
+        account, of Erik Sundvall’s early AI-coding experiment
+        <a href="https://github.com/ErikSundvall/prostate">ErikSundvall/prostate</a>.
+        It is a 24-zone prostate web component built with D3, under the
+        Apache License 2.0.
+      </p>
+      <ul>
+        <li><a href="diagram.html">Zone map demo</a></li>
+        <li><a href="report.html">Findings report (2026-11-12)</a></li>
+        <li><a href="https://github.com/ErikSundvall/prostate">Upstream repository</a></li>
+        <li><a href="LICENSE">Apache License 2.0</a></li>
+      </ul>
+      <footer>
+        <p>
+          <code>readme.md</code> still says “MIT License”. The license file in
+          this repository is the Apache License 2.0.
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>
