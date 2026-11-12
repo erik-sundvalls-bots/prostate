@@ -2,6 +2,14 @@
 
 A Web Component for visualizing prostate MRI zones with lesion data, built with TypeScript and D3.js.
 
+## Site
+
+`index.html` is a static front page that loads this component.
+`report.html` summarises a 2026-11-12 look at prostatecancer.ai and other
+open-source prostate schematics. `.github/workflows/pages.yml` deploys both
+to GitHub Pages from `main`. The original Tesseract-MI zone SVGs used in the
+report are in `assets/tesseract-svgs/`.
+
 ## Overview
 
 This widget displays an interactive SVG map of the prostate divided into 24 zones. It visualizes MRI findings (lesions) using PI-RADS scoring with colors and patterns, supports localization, and provides accessibility features.
@@ -180,7 +188,7 @@ deno task bundle
 
 ## License
 
-MIT License - see LICENSE file.
+Apache License 2.0 — see LICENSE file.
 
 ## Contributing
 
